@@ -6,7 +6,6 @@
 //本程序完成了链式队列数据结构及部分算法
 
 
-
 //队列每个元素的结点，链式队列结点与链表相同
 typedef struct NODE {
 
@@ -35,8 +34,33 @@ void printQueue(PQUEUE);
 
 int main() {
 
+	int val = 0;//临时储存出队结点数据
+
 	QUEUE q;
-	init(&q);
+	initQueue(&q);
+	printQueue(&q);
+
+	pushQueue(&q, 13);
+	pushQueue(&q, -100);
+	pushQueue(&q, 13);
+	pushQueue(&q, 241);
+	pushQueue(&q, 0);
+	pushQueue(&q, 1);
+	printQueue(&q);
+
+	if (popQueue(&q, &val)) {
+		printf("出队成功，出队结点数据为：%d\n", val);
+	}
+	printQueue(&q);
+	
+
+	pushQueue(&q, 1);
+	printQueue(&q);
+
+	if (popQueue(&q, &val)) {
+		printf("出队成功，出队结点数据为：%d\n", val);
+	}
+	printQueue(&q);
 
 
 
@@ -77,15 +101,44 @@ bool isEmptyQueue(PQUEUE pq) {
 //实现元素入队
 bool pushQueue(PQUEUE pq, int val) {
 
+	pq->rear->data = val;//赋值
 
+	//创建一个结点，用于存储下一个rear结点
+	PNODE p = (PNODE)malloc(sizeof(NODE));
+	if (p == NULL) {
+		printf("动态内存分配失败！！");
+		exit(-1);
+	}
 
+	//rear结点内容赋空值
+	p->data = NULL;
+	p->pNext = NULL;
+
+	//将p结点接到队列上
+	pq->rear->pNext = p;
+	pq->rear = p;
+	pq->QueSize++;
+
+	return true;
 }
 
 //实现元素出队，并通过*val返回出队的值
 bool popQueue(PQUEUE pq, int* val) {
 
+	if (isEmptyQueue(pq)) {
+		printf("队列为空，元素出队失败！\n");
+		return false;
+	}
 
+	*val = pq->front->data;//通过指针传值
 
+	//临时储存待出队结点front
+	PNODE p = pq->front;
+
+	pq->front = pq->front->pNext;
+	free(p);
+
+	return true;
 }
 
 
@@ -98,7 +151,7 @@ void printQueue(PQUEUE pq) {
 	PNODE p = pq->front;
 
 	if (isEmptyQueue(pq)) {
-		printf("队列为空，遍历输出失败！");
+		printf("队列为空，遍历输出失败！\n");
 	}
 	else {
 
@@ -110,6 +163,8 @@ void printQueue(PQUEUE pq) {
 			p = p->pNext;
 
 		}
+
+		printf("\n");
 	}
 
 }
