@@ -53,7 +53,6 @@ int main() {
 	}
 	printQueue(&q);
 	
-
 	pushQueue(&q, 1);
 	printQueue(&q);
 
