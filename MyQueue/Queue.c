@@ -62,8 +62,6 @@ int main() {
 	}
 	printQueue(&q);
 
-
-
 	return 0;
 }
 
